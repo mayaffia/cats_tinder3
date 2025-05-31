@@ -26,10 +26,10 @@
 
 **Главный экран (онлайн)**
 
-![telegram-cloud-photo-size-2-5321323884445824059-y](https://github.com/user-attachments/assets/f97de457-78d0-4421-a8a1-15ceaf106ef5)
+<img width="398" alt="image" src="https://github.com/user-attachments/assets/f97de457-78d0-4421-a8a1-15ceaf106ef5" />
 
 **Главный экран (оффлайн)**
-![telegram-cloud-photo-size-2-5321323884445824062-y](https://github.com/user-attachments/assets/44e4419b-7639-4a47-a5b1-3c43f7b2743c)
+<img width="398" alt="image" src="https://github.com/user-attachments/assets/44e4419b-7639-4a47-a5b1-3c43f7b2743c" />
 
 
 **Экран с деталями породы**
