@@ -12,19 +12,52 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  bool _previousOfflineState = false;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        Provider.of<CatProvider>(context, listen: false).fetchNewCat();
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     final catProvider = Provider.of<CatProvider>(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (catProvider.isOffline != _previousOfflineState) {
+        _previousOfflineState = catProvider.isOffline;
+
+        if (catProvider.isOffline && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  Icon(Icons.signal_wifi_off, color: Colors.white),
+                  SizedBox(width: 10),
+                  Text('You are offline. Showing cached content.'),
+                ],
+              ),
+              backgroundColor: Colors.orange,
+              duration: Duration(seconds: 3),
+            ),
+          );
+        } else if (!catProvider.isOffline && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Row(
+                children: [
+                  Icon(Icons.wifi, color: Colors.white),
+                  SizedBox(width: 10),
+                  Text('You are back online!'),
+                ],
+              ),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
+      }
+    });
 
     return Scaffold(
       appBar: AppBar(
@@ -37,6 +70,13 @@ class HomeScreenState extends State<HomeScreen> {
           ),
         ),
         actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Icon(
+              catProvider.isOffline ? Icons.signal_wifi_off : Icons.wifi,
+              color: catProvider.isOffline ? Colors.orange : Colors.green,
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.favorite),
             onPressed:
@@ -48,10 +88,100 @@ class HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: Center(
-        child:
-            catProvider.currentCat == null
-                ? CircularProgressIndicator()
-                : CatCard(),
+        child: Builder(
+          builder: (context) {
+            if (catProvider.isOffline) {
+              if (catProvider.likedCats.isNotEmpty) {
+                if (catProvider.currentCat != null) {
+                  return CatCard();
+                }
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.signal_wifi_off, size: 48, color: Colors.orange),
+                    SizedBox(height: 16),
+                    Text(
+                      'You are offline',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'You can view your liked cats:',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const LikedCatsScreen(),
+                          ),
+                        );
+                      },
+                      child: Text('View Liked Cats'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pink,
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.signal_wifi_off, size: 64, color: Colors.orange),
+                    SizedBox(height: 16),
+                    Text(
+                      'You are offline',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'No cached cats available',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    SizedBox(height: 24),
+                    Text(
+                      'Please connect to the internet\nto see new cats',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                    ),
+                  ],
+                );
+              }
+            }
+
+            if (catProvider.currentCat != null) {
+              return CatCard();
+            }
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text(
+                  'Loading cats...',
+                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
