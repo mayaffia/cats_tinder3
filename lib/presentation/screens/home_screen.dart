@@ -124,7 +124,6 @@ class HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      child: Text('View Liked Cats'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.pink,
                         foregroundColor: Colors.white,
@@ -133,6 +132,7 @@ class HomeScreenState extends State<HomeScreen> {
                           vertical: 12,
                         ),
                       ),
+                      child: Text('View Liked Cats'),
                     ),
                   ],
                 );

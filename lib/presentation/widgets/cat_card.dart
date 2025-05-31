@@ -28,7 +28,7 @@ class CatCard extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.8),
+                color: Colors.orange.withAlpha(204), // 0.8 * 255 = 204
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
@@ -146,7 +146,7 @@ class CatCard extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               decoration: BoxDecoration(
-                color: Colors.pink.withOpacity(0.7),
+                color: Colors.pink.withAlpha(179), // 0.7 * 255 = 179
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Text(
