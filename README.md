@@ -16,8 +16,7 @@
 8. Оффлайн режим:
    - Отображение ранее загруженных котиков без доступа к интернету
    - Сохранение лайков/дизлайков между выходами из приложения
-   - Кэширование изображений котиков для доступа без сети
-   - Индикация статуса сети в интерфейсе (иконка и Snackbar)
+   - Индикация статуса сети в интерфейсе
 
 # Скриншоты приложения
 
@@ -25,9 +24,13 @@
 
 <img width="91" alt="image" src="https://github.com/user-attachments/assets/d6df8571-b8d8-4f37-920a-cce7c9d0e714" />
 
-**Главный экран**
+**Главный экран (онлайн)**
 
-<img width="398" alt="image" src="https://github.com/user-attachments/assets/bcdd9099-53df-492a-987c-929e96cf7bc0" />
+![telegram-cloud-photo-size-2-5321323884445824059-y](https://github.com/user-attachments/assets/f97de457-78d0-4421-a8a1-15ceaf106ef5)
+
+**Главный экран (оффлайн)**
+![telegram-cloud-photo-size-2-5321323884445824062-y](https://github.com/user-attachments/assets/44e4419b-7639-4a47-a5b1-3c43f7b2743c)
+
 
 **Экран с деталями породы**
 
@@ -41,15 +44,9 @@
 
 <img width="387" alt="image" src="https://github.com/user-attachments/assets/bf844ad7-43c6-46eb-aa20-7738c2d65eb3" />
 
-# Технические особенности
-
-1. Использование SQLite для локального хранения данных о лайкнутых котиках
-2. Кэширование изображений с помощью cached_network_image
-3. Проверка наличия сети с помощью connectivity_plus
-4. Обработка ошибок и оффлайн-режима
-5. Unit-тесты для операций лайков и дизлайков
-6. Мокирование классов API и базы данных для тестирования
 
 # Ссылка на скачивание актуальной версии APK
 
 https://github.com/mayaffia/cats_tinder3/releases/tag/v1
+
+
