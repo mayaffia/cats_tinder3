@@ -29,6 +29,7 @@
 <img width="398" alt="image" src="https://github.com/user-attachments/assets/f97de457-78d0-4421-a8a1-15ceaf106ef5" />
 
 **Главный экран (оффлайн)**
+
 <img width="398" alt="image" src="https://github.com/user-attachments/assets/44e4419b-7639-4a47-a5b1-3c43f7b2743c" />
 
 
