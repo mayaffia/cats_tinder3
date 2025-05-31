@@ -22,6 +22,31 @@ class CatCard extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
+        if (catProvider.isOffline)
+          Positioned(
+            top: 0,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.orange.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.signal_wifi_off, size: 16, color: Colors.white),
+                  SizedBox(width: 4),
+                  Text(
+                    'Offline Mode',
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         Positioned(
           top: 20,
           child: Text(
@@ -87,6 +112,12 @@ class CatCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
+              if (catProvider.isOffline && catProvider.likedCats.length > 1)
+                IconButton(
+                  icon: Icon(Icons.arrow_back_ios, color: Colors.pink),
+                  onPressed: () => catProvider.previousOfflineCat(),
+                ),
+
               DislikeButton(onPressed: () => catProvider.dislikeCat()),
               SizedBox(width: 100),
               LikeButton(
@@ -99,9 +130,35 @@ class CatCard extends StatelessWidget {
                   provider.fetchNewCat();
                 },
               ),
+
+              if (catProvider.isOffline && catProvider.likedCats.length > 1)
+                IconButton(
+                  icon: Icon(Icons.arrow_forward_ios, color: Colors.pink),
+                  onPressed: () => catProvider.nextOfflineCat(),
+                ),
             ],
           ),
         ),
+
+        if (catProvider.isOffline && catProvider.likedCats.length > 1)
+          Positioned(
+            bottom: 40,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.pink.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Text(
+                'Cat ${catProvider.currentOfflineCatIndex + 1}/${catProvider.likedCats.length}',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

@@ -16,6 +16,7 @@ class CatProvider with ChangeNotifier {
   String _filterBreed = 'all';
   List<String> _availableBreeds = [];
   bool _isOffline = false;
+  int _currentOfflineCatIndex = 0;
 
   CatProvider(this._apiService) {
     _isOffline = !_apiService.isConnected;
@@ -28,7 +29,8 @@ class CatProvider with ChangeNotifier {
 
       if (!wasOffline && _isOffline) {
         if (_likedCats.isNotEmpty) {
-          _currentCat = _likedCats.first;
+          _currentOfflineCatIndex = 0;
+          _currentCat = _likedCats[_currentOfflineCatIndex];
         }
         notifyListeners();
       } else if (wasOffline && !_isOffline) {
@@ -46,6 +48,7 @@ class CatProvider with ChangeNotifier {
   List<String> get availableBreeds => _availableBreeds;
   String get filterBreed => _filterBreed;
   bool get isOffline => _isOffline;
+  int get currentOfflineCatIndex => _currentOfflineCatIndex;
 
   Future<void> _loadLikedCatsFromDatabase() async {
     try {
@@ -53,7 +56,11 @@ class CatProvider with ChangeNotifier {
       _updateAvailableBreeds();
 
       if (_isOffline && _likedCats.isNotEmpty && _currentCat == null) {
-        _currentCat = _likedCats.first;
+        _currentOfflineCatIndex =
+            _currentOfflineCatIndex < _likedCats.length
+                ? _currentOfflineCatIndex
+                : 0;
+        _currentCat = _likedCats[_currentOfflineCatIndex];
       } else if (!_isOffline && _currentCat == null) {
         fetchNewCat();
       }
@@ -70,11 +77,27 @@ class CatProvider with ChangeNotifier {
     }
   }
 
+  void nextOfflineCat() {
+    if (_likedCats.isEmpty) return;
+
+    _currentOfflineCatIndex = (_currentOfflineCatIndex + 1) % _likedCats.length;
+    _currentCat = _likedCats[_currentOfflineCatIndex];
+    notifyListeners();
+  }
+
+  void previousOfflineCat() {
+    if (_likedCats.isEmpty) return;
+
+    _currentOfflineCatIndex =
+        (_currentOfflineCatIndex - 1 + _likedCats.length) % _likedCats.length;
+    _currentCat = _likedCats[_currentOfflineCatIndex];
+    notifyListeners();
+  }
+
   Future<void> fetchNewCat() async {
     if (_isOffline) {
-      if (_likedCats.isNotEmpty && _currentCat == null) {
-        _currentCat = _likedCats.first;
-        notifyListeners();
+      if (_likedCats.isNotEmpty) {
+        nextOfflineCat();
       }
       return;
     }
@@ -95,7 +118,8 @@ class CatProvider with ChangeNotifier {
         _isOffline = true;
 
         if (_likedCats.isNotEmpty) {
-          _currentCat = _likedCats.first;
+          _currentOfflineCatIndex = 0;
+          _currentCat = _likedCats[_currentOfflineCatIndex];
         }
       } else {
         _errorMessage = e.toString();
@@ -128,7 +152,11 @@ class CatProvider with ChangeNotifier {
   }
 
   void dislikeCat() {
-    fetchNewCat();
+    if (_isOffline && _likedCats.isNotEmpty) {
+      nextOfflineCat();
+    } else {
+      fetchNewCat();
+    }
   }
 
   Future<void> removeLikedCat(Cat cat) async {
